@@ -1,0 +1,126 @@
+---
+title: Lab 1.1 Funciones en R
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+Una función es un conjunto de instrucciones organizadas para realizar una tarea específica. R tiene un gran número de funciones incorporadas y el usuario puede crear sus propias funciones.
+
+En R, una función es un objeto, por lo que el intérprete de R es capaz de pasar el control a la función, junto con los argumentos que puedan ser necesarios para que la función realice las acciones.
+
+La función, a su vez, realiza su tarea y devuelve el control al intérprete, así como cualquier resultado que pueda ser almacenado en otros objetos.
+
+#### Definición de la función
+Una función R se crea utilizando la palabra clave function. La sintaxis básica de la definición de una función en R es la siguiente
+
+```{r echo=TRUE}
+nombre_de_la_funcion <- function(arg_1, arg_2, ...) {
+   #Cuerpo de la función
+}
+```
+
+#### Componentes de la función
+Las diferentes partes de una función son:
+
+* Nombre de la función - Es el nombre real de la función. Se almacena en el entorno de R como un objeto con este nombre.
+
+* Argumentos - Un argumento es un marcador de posición. Cuando se invoca una función, se le pasa un valor al argumento. Los argumentos son opcionales; es decir, una función puede no contener argumentos. También los argumentos pueden tener valores por defecto.
+
+* Cuerpo de la función - El cuerpo de la función contiene una colección de declaraciones que definen lo que hace la función.
+
+* Valor de retorno - El valor de retorno de una función es la última expresión del cuerpo de la función que se evalúa.
+
+R tiene muchas funciones incorporadas que se pueden llamar directamente en el programa sin definirlas primero. También podemos crear y utilizar nuestras propias funciones denominadas funciones definidas por el usuario.
+
+#### Funciones incorporadas
+Ejemplos sencillos de funciones incorporadas son seq(), mean(), max(), sum(x) y paste(...) etc. Son llamadas directamente por los programas escritos por el usuario. 
+
+```{r}
+# Crear una secuencia de números del 32 al 44.
+print(seq(32,44))
+
+# Encuentra la media de los números del 25 al 82.
+print(mean(25:82))
+
+# Hallar la suma de los números del 41 al 68.
+print(sum(41:68))
+```
+
+#### Función definida por el usuario
+Podemos crear funciones definidas por el usuario en R. Son específicas para lo que un usuario quiere y una vez creadas pueden ser utilizadas como las funciones incorporadas. A continuación se muestra un ejemplo de cómo se crea y utiliza una función.
+
+```{r}
+# Crear una función para imprimir cuadrados de números en secuencia.
+new.function <- function(a) {
+   for(i in 1:a) {
+      b <- i^2
+      print(b)
+   }
+}
+```
+
+#### Llamada a una función
+
+```{r}
+# Crear una función para imprimir cuadrados de números en secuencia.
+new.function <- function(a) {
+   for(i in 1:a) {
+      b <- i^2
+      print(b)
+   }
+}
+
+# Llama a la función new.function suministrando 6 como argumento.
+new.function(6)
+```
+
+#### Llamar a una función sin un argumento
+
+```{r}
+# Crear una función sin argumento.
+new.function <- function() {
+   for(i in 1:5) {
+      print(i^2)
+   }
+}	
+
+# Llamar a la función sin suministrar un argumento.
+new.function()
+```
+
+#### Llamada a una función con valores de argumentos (por posición y por nombre)
+Los argumentos de una llamada a una función pueden suministrarse en la misma secuencia definida en la función o pueden suministrarse en una secuencia diferente pero asignada a los nombres de los argumentos.
+
+```{r}
+# Crear una función con argumentos.
+new.function <- function(a,b,c) {
+   result <- a * b + c
+   print(result)
+}
+
+# Llamar a la función por posición de los argumentos.
+new.function(5,3,11)
+
+# Llamar a la función por los nombres de los argumentos.
+new.function(a = 11, b = 5, c = 3)
+```
+
+#### Llamada a una función con un argumento por defecto
+Podemos definir el valor de los argumentos en la definición de la función y llamar a la función sin suministrar ningún argumento para obtener el resultado por defecto. Pero también podemos llamar a estas funciones suministrando nuevos valores de los argumentos y obtener un resultado no predeterminado.
+
+```{r}
+# Crear una función con argumentos.
+new.function <- function(a = 3, b = 6) {
+   result <- a * b
+   print(result)
+}
+
+# Llama a la función sin dar ningún argumento.
+new.function()
+
+# Llamar a la función dando nuevos valores del argumento.
+new.function(9,5)
+```

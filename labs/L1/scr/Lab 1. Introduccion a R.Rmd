@@ -1,0 +1,323 @@
+---
+title: Lab 1. Introducción al lenguaje de programación I 
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+En este laboratorio, introduciremos algunos comandos R simples. La mejor manera de aprender un nuevo lenguaje es probando los comandos. R y RStudio pueden ser descargados de
+
+<center>[http://cran.r-project.org/](http://cran.r-project.org/)</center>
+<center>[https://rstudio.com/products/rstudio/download/](https://rstudio.com/products/rstudio/download/)</center>
+
+### 1. Comandos básicos
+
+R utiliza funciones para realizar operaciones. Para ejecutar una función llamada funcname, escribimos funcname(input1, input2), donde las entradas (o argumentos) input1 y input2 le dicen a R cómo ejecutar la función. Una función puede tener cualquier número de entradas. Por ejemplo, para crear un vector de números, usamos la función c() (para concatenar). Cualquier número dentro de los paréntesis se unen entre sí. El siguiente comando instruye a R para que junte los números 1, 3, 2 y 5, y los guarde como un vector llamado x. Cuando tecleamos x, nos devuelve el vector.
+
+```{r}
+x<-c(1,3,2,5)
+x
+```
+
+También podemos guardar cosas usando = en lugar de <-:
+
+```{r}
+x=c(1,6,2)
+x
+y=c(1,4,3)
+y
+```
+
+Si se escribe ?funcname, R abrirá siempre una nueva ventana de ayuda con información adicional sobre la función funcname.
+
+Podemos decirle a R que sume dos conjuntos de números. Entonces sumará el primer número de x al primer número de y, y así sucesivamente. Sin embargo, x y y deberían tener la misma longitud. Podemos comprobar su longitud usando la función length().
+
+```{r}
+#?length
+length (x)
+length (y)
+x+y
+```
+
+La función ls() nos permite ver una lista de todos los objetos, como datos y funciones, que hemos guardado hasta ahora. La función rm() puede ser usada para borrar cualquiera que no queramos.
+
+```{r}
+ls()
+rm(x,y)
+ls()
+```
+
+También es posible retirar todos los objetos a la vez:
+
+```{r}
+rm(list=ls())
+```
+
+La función matrix() puede ser usada para crear una matriz de números. Antes de usar la función matrix(), podemos aprender más sobre ella:
+
+```{r}
+#?matrix
+```
+
+El archivo de ayuda revela que la función matrix() toma un número de entradas, pero por ahora nos centramos en las tres primeras: los datos (las entradas en la matriz), el número de filas y el número de columnas. Primero, creamos una matriz simple.
+
+```{r}
+x<-matrix (data=c(1,2,3,4) , nrow=2, ncol =2)
+x
+```
+
+Note que podríamos omitir el teclear data=, nrow=, y ncol= en el comando matrix() de arriba: es decir, podríamos simplemente teclear
+
+```{r}
+x<-matrix (c(1,2,3,4) ,2,2)
+x
+```
+
+y esto tendría el mismo efecto. Sin embargo, a veces puede ser útil especificar los nombres de los argumentos que se pasan, ya que de lo contrario R asumirá que los argumentos de la función se pasan a la función en el mismo orden que se da en el archivo de ayuda de la función. Como ilustra este ejemplo, por defecto R crea matrices rellenando sucesivamente las columnas. Alternativamente, se puede utilizar la opción byrow=TRUE para rellenar la matriz en el orden de las filas.
+
+```{r}
+matrix (data=c(1,2,3,4) , nrow=2, ncol =2,byrow =TRUE)
+```
+
+Observe que en el comando anterior no asignamos la matriz a un valor como x. En este caso la matriz se imprime en la pantalla pero no se guarda para futuros cálculos. La función sqrt() devuelve la raíz cuadrada de cada elemento de un vector o matriz. El comando x^2 eleva cada elemento de x a la potencia 2; cualquier potencia es posible, incluyendo las potencias fraccionarias o negativas.
+
+```{r}
+sqrt(x)
+x^2
+```
+
+La función rnorm() genera un vector de variables normales aleatorias, con el primer argumento n el tamaño de la muestra. Cada vez que llamemos a esta función, obtendremos una respuesta diferente. Aquí creamos dos conjuntos de números correlacionados, x e y, y usamos la función cor() para calcular la correlación entre ellos.
+
+```{r}
+x<-rnorm (50)
+y<-x+rnorm (50, mean=50, sd=.1)
+cor(x,y)
+```
+
+Por defecto, rnorm() crea variables aleatorias normales estándar con una media de 0 y una desviación estándar de 1. Sin embargo, la media y la desviación estándar pueden ser alteradas usando los argumentos mean y sd, como se ilustra arriba. A veces queremos que nuestro código reproduzca exactamente el mismo conjunto de números aleatorios; podemos utilizar la función set.seed() para hacerlo. La función set.seed() toma un argumento entero (arbitrario).
+
+```{r}
+set.seed (1303)
+rnorm (50)
+```
+
+Utilizamos set.seed() en todos los laboratorios siempre que realizamos cálculos que implican cantidades aleatorias. En general, esto debería permitir al usuario reproducir nuestros resultados. Sin embargo, debe tenerse en cuenta que a medida que se disponga de nuevas versiones de R es posible que se formen algunas pequeñas discrepancias entre el libro y la salida de R.
+
+Las funciones mean() y var() pueden utilizarse para calcular la media y la varianza de un vector de números. Aplicando sqrt() a la salida de var() se obtendrá la desviación estándar. O simplemente podemos usar la función sd().
+
+```{r}
+set.seed (3)
+y<-rnorm (100)
+mean(y)
+var(y)
+sqrt(var(y))
+sd(y)
+```
+
+### 2. Gráficas
+
+La función plot() es la forma principal de representar los datos en R. Por ejemplo, plot(x,y) produce un diagrama de dispersión de los números en x frente a los números en y. Hay muchas opciones adicionales que pueden pasarse a la función plot(). Por ejemplo, si se pasa el argumento xlab se obtendrá una etiqueta en el eje x. Para obtener más información sobre la función plot(), escribe ?plot.
+
+```{r}
+set.seed(321)
+x<-rnorm (100)
+set.seed(123)
+y<-rnorm (100)
+plot(x,y)
+plot(x,y,xlab="Este es el eje x",ylab="Este es el eje y",
+main="Plot de X vs Y")
+```
+
+La librería ggplot2 permite obtener gráficas de gran calidad y con muchas opciones para representar los datos y extraer así información relevante de los conjuntos de datos que se estudien, como relaciones, distribuciones, patrones y demás comportamientos aplicables tanto al análisis de datos exploratorio como a los modelos predictivos.
+
+```{r}
+library(ggplot2)
+```
+
+Uno de los tipos de gráficos más comunes en el anállisis de datos es el gráfico de barras, en el que simplemente se representa con barras de distintas “alturas” las dimensiones de una cantidad numérica comparada con otra. Por ejemplo, tomemos como dataset inicial el mtcars, cuyos primeros valores son:
+
+```{r}
+head(mtcars)
+```
+
+Y que contiene información técnica de distintos tipos de marca y modelos de vehículos.
+
+Grafiquemos entonces el total de autos en el dataset agrupados por la cantidad de “cambios o velocidades” (columna ‘gear’):
+
+```{r}
+#?ggplot
+ggplot(data = mtcars, aes(x = gear)) +
+  geom_bar()
+```
+
+Como se observa en el ejemplo, todo gráfico hecho con ggplot debe tener un primer argumento ggplot() en donde debe especificarse cuál es el dataset que contiene la información que se desea graficar. Esta representa la primera capa que guarda la información del conjunto de datos de partida. Con el argumento data = mtcars se establece que el dataset es el indicado, y en términos de R este conjunto de datos puede ser cualquier dataframe construido o cargado previamente. Luego, se observa en el ejemplo el comando aes(), que se refiere a la “estética” del gráfico, es decir, en este caso se especifica o “mapea” cuál variable del conjunto de datos es el que se va a representar en el eje “x”. Una vez completada esta función, se agrega una segunda capa usando el operador + , y luego se establece que el gráfico a construir es de tipo barra con la función geom_bar(). Con solo esos argumentos es suficiente para producir el gráfico mostrado en el ejemplo. Ahora bien, aunque el gráfico enumera las cantidades de autos con 3, 4 y 5 velocidades que forman parte del conjunto de datos, vamos a modificar ciertas características visuales iniciales a fin de obtener un resultado final más agradable. Por ejemplo, cambiemos las etiquetas de los ejes y agregemos un título al gráfico:
+
+```{r}
+ggplot(data = mtcars, aes(x = gear)) + 
+  geom_bar() + 
+  xlab("Número de Velocidades") + 
+  ylab("Cantidades") + 
+  ggtitle("Gráfico de Velocidades de mtcars")
+```
+
+Obsérvese que esto se logra agregrando capas con el operador + , e incorporando los elementos deseados. El gráfico luce mucho mejor, pero tal vez el color gris por defecto no resulta muy atractivo. Si lo deseamos, podemos cambiar el color con el que se representan tanto el área interior de las barras, como su borde, colocando explícitamente los valores dentro de la función geom_bar():
+
+```{r}
+ggplot(data = mtcars, aes(x = gear)) + 
+  geom_bar(color = 'darkslategray', fill = 'steelblue') + 
+  xlab("Número de Velocidades") + 
+  ylab("Cantidades") + 
+  ggtitle("Gráfico de Velocidades de mtcars")
+```
+
+Como referencia para los nombres de los colores usados, se recomienda revisar http://sape.inf.usi.ch/quick-reference/ggplot2/colour
+
+Y si el gráfico lo amerita, podemos también cambiar la orientación de los ejes haciendo uso de la función coord_flip():
+
+```{r}
+ggplot(data = mtcars, aes(x = gear)) + 
+  geom_bar(color = 'darkslategray', fill = 'steelblue') + 
+  xlab("Número de Velocidades") + 
+  ylab("Cantidades") + 
+  ggtitle("Gráfico de Velocidades de mtcars") +
+  coord_flip()
+```
+
+Ahora bien, si deseamos que cada grupo de datos (velocidades, en este caso) tenga colores distintos, basta con asignar, dentro de la “estética”, el color como parámetro, y mapearlo a alguna variable. En este caso, al propio valor de “gear”, pero dicho valor debe ser convertido antes a una variable tipo factor, es decir, una variable categórica:
+
+```{r}
+ggplot(data = mtcars, aes(x = gear, fill = as.factor(gear))) + 
+  geom_bar() + 
+  xlab("Número de Velocidades") + 
+  ylab("Cantidades") + 
+  ggtitle("Gráfico de Velocidades de mtcars") +
+  labs(fill = "Velocidades")
+```
+
+En este caso, se introdujo la función labs(fill = ... ) para cambiar el título de la leyenda. De lo contrario, en dicha leyenda aparecería as.factor(gear).
+
+Si queremos, adicionalmente, cambiar el estilo del fondo, podemos hacerlo seleccionando el “tema” de visualización de la siguiente manera:
+
+```{r}
+ggplot(data = mtcars, aes(x = gear, fill = as.factor(gear))) + 
+  geom_bar() + 
+  xlab("Número de Velocidades") + 
+  ylab("Cantidades") + 
+  ggtitle("Gráfico de Velocidades de mtcars") +
+  labs(fill = "Velocidades") + 
+  theme_minimal()
+```
+
+La lista completa con todos los temas disponibles por defecto se encuentra en https://ggplot2.tidyverse.org/reference/ggtheme.html
+
+Por último (y esto es aplicable a cualquier otro gráfico que mostremos a lo largo de todo el ejercicio práctico), es importante mencionar que cualquier indicación de parámetros (por ejemplo, la “estética”) que coloquemos en la función ggplot(), será sobreescrita si modificamos los argumentos de la función geom_... posterior. Es decir, veamos el siguiente ejemplo:
+
+```{r}
+ggplot(data = mtcars, aes(x = gear, fill = as.factor(gear))) + 
+  geom_bar(color = 'slateblue', fill = 'skyblue2') + 
+  xlab("Número de Velocidades") + 
+  ylab("Cantidades") + 
+  ggtitle("Gráfico de Velocidades de mtcars") +
+  labs(fill = "Velocidades") + 
+  theme_minimal()
+```
+
+Como puede observarse, aún cuando en la primera función se estableció el relleno de las barras en función de los valores de la variable ‘gear’, al fijar el color y el relleno de nuevo en la función geom_bar() se tomará esta última como aquella a aplicar al gráfico.
+
+La función seq() puede ser usada para crear una secuencia de números. Por ejemplo, seq(a,b) hace un vector de números enteros entre a y b. Hay muchas otras opciones: por ejemplo, seq(0,1,length=10) hace una secuencia de 10 números que están igualmente espaciados entre 0 y 1. Escribir 3:11 es una forma abreviada de seq(3,11) para argumentos de números enteros.
+
+```{r}
+x<-seq (1 ,10)
+x
+x<-1:10
+x
+x<-seq(-pi ,pi ,length =50)
+x
+```
+
+### 3. Indexación de datos
+
+A menudo deseamos examinar parte de un conjunto de datos. Supongamos que nuestros datos están almacenados en la matriz A.
+
+```{r}
+A<-matrix(1:16 ,4 ,4)
+A
+```
+
+Luego, tecleando:
+
+```{r}
+A[2,3]
+```
+
+seleccionará el elemento correspondiente a la segunda fila y la tercera columna. El primer número después del símbolo de paréntesis abierto [ se refiere siempre a la fila, y el segundo número se refiere siempre a la columna. También podemos seleccionar varias filas y columnas a la vez, proporcionando vectores como los índices.
+
+```{r}
+A[c(1,3) , c(2,4) ]
+A[1:3 ,2:4]
+A[seq(1,3),seq(2,4)]
+A[1:2,]
+A[,1:2]
+```
+
+Los dos últimos ejemplos incluyen la ausencia de índice para las columnas o la ausencia de índice para las filas. Estos indican que R debe incluir todas las columnas o todas las filas, respectivamente. R trata una sola fila o columna de una matriz como un vector.
+
+```{r}
+A[1,]
+```
+
+El uso de un signo negativo - en el índice le dice a R que mantenga todas las filas o columnas excepto las indicadas en el índice.
+
+```{r}
+A[-c(1,3), ]
+A[-c(1,3),-c(1,3,4)]
+```
+
+La función dim() da como resultado el número de filas seguido por el número de columnas de una matriz dada.
+
+```{r}
+dim(A)
+```
+
+### 4. Carga de datos
+
+Para la mayoría de los análisis, el primer paso consiste en importar un conjunto de datos a R. La función read.table() es una de las principales formas de hacerlo. El archivo de ayuda contiene detalles sobre cómo utilizar esta función. Podemos usar la función write.table() para exportar datos.
+
+Antes de intentar cargar un conjunto de datos, debemos asegurarnos de que R sepa buscar los datos en el directorio apropiado. Por ejemplo, en un sistema Windows se podría seleccionar el directorio utilizando la función Change dir. . . en el menú Archivo. Sin embargo, los detalles de cómo hacerlo dependen del sistema operativo (por ejemplo, Windows, Mac, Unix) que se esté utilizando, por lo que no damos más detalles aquí. Comenzamos cargando en el conjunto de datos de Auto. Estos datos son parte de la biblioteca de ISLR (discutimos las bibliotecas en el capítulo 3) pero para ilustrar la función read.table() los cargamos ahora desde un archivo de texto. El siguiente comando cargará el archivo Auto.data en R y lo almacenará como un objeto llamado Auto, en un formato llamado marco de datos. (El archivo de texto se puede obtener en el sitio web de este libro.) Una vez que se han cargado los datos, la función fix() se puede usar para verlos en una ventana como la de una hoja de cálculo. Sin embargo, la ventana debe cerrarse antes de que se puedan introducir más comandos R.
+
+```{r}
+Auto<-read.table("Auto.data.txt")
+head(Auto)
+```
+
+Tenga en cuenta que Auto.data es simplemente un archivo de texto, que puede abrir en su computadora usando un editor de texto estándar. A menudo es una buena idea ver un conjunto de datos utilizando un editor de texto u otro software como Excel antes de cargarlo en R.
+
+Este conjunto de datos en particular no se ha cargado correctamente, porque R ha asumido que los nombres de las variables forman parte de los datos y por lo tanto los ha incluido en la primera fila. El conjunto de datos también incluye una serie de observaciones que faltan, indicadas por un signo de interrogación ?. Los valores faltantes son comunes en los conjuntos de datos reales. El uso de la opción header=T (o header=TRUE) en la función read.table() le dice a R que la primera línea del archivo contiene los nombres de las variables, y el uso de la opción na.strings le dice a R que cada vez que vea un determinado carácter o conjunto de caracteres (como un signo de interrogación), debe tratarse como un elemento faltante de la matriz de datos.
+
+```{r}
+Auto<-read.table ("Auto.data.txt", header =T,na.strings ="?")
+head(Auto)
+```
+
+Excel es un programa de almacenamiento de datos de formato común. Una forma fácil de cargar esos datos en R es guardarlos como un archivo csv (valor separado por comas) y luego usar la función read.csv() para cargarlos.
+
+```{r}
+Auto<-read.csv("Auto.csv", header =T,na.strings ="?")
+head(Auto)
+dim(Auto)
+```
+
+La función dim() nos dice que los datos tienen 392 observaciones, o filas, y nueve variables, o columnas. Hay varias maneras de tratar los datos que faltan. En este caso, sólo cinco de las filas contienen observaciones faltantes, y por lo tanto elegimos usar la función na.omit() para simplemente eliminar estas filas.
+
+```{r}
+Auto<-na.omit(Auto)
+dim(Auto)
+```
+
+Una vez que los datos se cargan correctamente, podemos usar names() para comprobar los nombres de las variables.
+
+```{r}
+names(Auto)
+```
